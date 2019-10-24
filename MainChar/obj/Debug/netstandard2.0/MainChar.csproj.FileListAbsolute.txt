@@ -1,0 +1,8 @@
+D:\VisualStudio\C#\Fighter\MainChar\bin\Debug\netstandard2.0\MainChar.deps.json
+D:\VisualStudio\C#\Fighter\MainChar\bin\Debug\netstandard2.0\MainChar.dll
+D:\VisualStudio\C#\Fighter\MainChar\bin\Debug\netstandard2.0\MainChar.pdb
+D:\VisualStudio\C#\Fighter\MainChar\obj\Debug\netstandard2.0\MainChar.csprojAssemblyReference.cache
+D:\VisualStudio\C#\Fighter\MainChar\obj\Debug\netstandard2.0\MainChar.AssemblyInfoInputs.cache
+D:\VisualStudio\C#\Fighter\MainChar\obj\Debug\netstandard2.0\MainChar.AssemblyInfo.cs
+D:\VisualStudio\C#\Fighter\MainChar\obj\Debug\netstandard2.0\MainChar.dll
+D:\VisualStudio\C#\Fighter\MainChar\obj\Debug\netstandard2.0\MainChar.pdb

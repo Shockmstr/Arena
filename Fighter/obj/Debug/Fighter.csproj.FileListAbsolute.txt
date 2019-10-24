@@ -1,0 +1,9 @@
+D:\VisualStudio\C#\Fighter\Fighter\obj\Debug\Fighter.csprojAssemblyReference.cache
+D:\VisualStudio\C#\Fighter\Fighter\obj\Debug\Fighter.Form1.resources
+D:\VisualStudio\C#\Fighter\Fighter\obj\Debug\Fighter.Properties.Resources.resources
+D:\VisualStudio\C#\Fighter\Fighter\obj\Debug\Fighter.csproj.GenerateResource.cache
+D:\VisualStudio\C#\Fighter\Fighter\bin\Debug\Fighter.exe.config
+D:\VisualStudio\C#\Fighter\Fighter\bin\Debug\Fighter.exe
+D:\VisualStudio\C#\Fighter\Fighter\bin\Debug\Fighter.pdb
+D:\VisualStudio\C#\Fighter\Fighter\obj\Debug\Fighter.exe
+D:\VisualStudio\C#\Fighter\Fighter\obj\Debug\Fighter.pdb
