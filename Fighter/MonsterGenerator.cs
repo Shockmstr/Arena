@@ -59,7 +59,7 @@ namespace Fighter
             int lv = player.Level;
             int maxHP = rand.Next(10, 60) * lv;
             int curHP = maxHP;
-            int dam = lv + rand.Next(4, 7);
+            int dam = lv + rand.Next(4, 12);
             int exp = lv * rand.Next(lv, lv * 5);
             Monster mon = new Monster
             {

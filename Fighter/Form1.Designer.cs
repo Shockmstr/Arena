@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.txtProgress = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnFlee = new System.Windows.Forms.Button();
             this.btnDef = new System.Windows.Forms.Button();
             this.btnStrAtk = new System.Windows.Forms.Button();
             this.btnAtk = new System.Windows.Forms.Button();
@@ -52,7 +53,11 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.label7 = new System.Windows.Forms.Label();
             this.lbDMG = new System.Windows.Forms.Label();
-            this.btnFlee = new System.Windows.Forms.Button();
+            this.cbItems = new System.Windows.Forms.ComboBox();
+            this.btnUseItem = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.lbMonsterDMG = new System.Windows.Forms.Label();
+            this.chkAutoClear = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,10 +80,21 @@
             this.groupBox1.Controls.Add(this.btnAtk);
             this.groupBox1.Location = new System.Drawing.Point(92, 217);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(302, 161);
+            this.groupBox1.Size = new System.Drawing.Size(302, 152);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Action";
+            // 
+            // btnFlee
+            // 
+            this.btnFlee.Location = new System.Drawing.Point(187, 84);
+            this.btnFlee.Name = "btnFlee";
+            this.btnFlee.Size = new System.Drawing.Size(75, 40);
+            this.btnFlee.TabIndex = 3;
+            this.btnFlee.Text = "Flee";
+            this.toolTip.SetToolTip(this.btnFlee, "Flee the battle but losing half of your current HP.");
+            this.btnFlee.UseVisualStyleBackColor = true;
+            this.btnFlee.Click += new System.EventHandler(this.btnFlee_Click);
             // 
             // btnDef
             // 
@@ -135,10 +151,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(892, 141);
+            this.label3.Font = new System.Drawing.Font("Lucida Handwriting", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(894, 141);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 24);
+            this.label3.Size = new System.Drawing.Size(83, 24);
             this.label3.TabIndex = 6;
             this.label3.Text = "label3";
             // 
@@ -147,6 +163,7 @@
             this.HPBarM.Location = new System.Drawing.Point(818, 92);
             this.HPBarM.Name = "HPBarM";
             this.HPBarM.Size = new System.Drawing.Size(302, 35);
+            this.HPBarM.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.HPBarM.TabIndex = 2;
             // 
             // HPBarP
@@ -154,6 +171,7 @@
             this.HPBarP.Location = new System.Drawing.Point(92, 94);
             this.HPBarP.Name = "HPBarP";
             this.HPBarP.Size = new System.Drawing.Size(302, 33);
+            this.HPBarP.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.HPBarP.TabIndex = 1;
             // 
             // lbPlayerHP
@@ -278,22 +296,67 @@
             this.lbDMG.TabIndex = 18;
             this.lbDMG.Text = "label8";
             // 
-            // btnFlee
+            // cbItems
             // 
-            this.btnFlee.Location = new System.Drawing.Point(187, 84);
-            this.btnFlee.Name = "btnFlee";
-            this.btnFlee.Size = new System.Drawing.Size(75, 40);
-            this.btnFlee.TabIndex = 3;
-            this.btnFlee.Text = "Flee";
-            this.toolTip.SetToolTip(this.btnFlee, "Flee the battle but losing half of your current HP.");
-            this.btnFlee.UseVisualStyleBackColor = true;
-            this.btnFlee.Click += new System.EventHandler(this.btnFlee_Click);
+            this.cbItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbItems.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbItems.FormattingEnabled = true;
+            this.cbItems.Location = new System.Drawing.Point(92, 409);
+            this.cbItems.Name = "cbItems";
+            this.cbItems.Size = new System.Drawing.Size(219, 24);
+            this.cbItems.TabIndex = 19;
+            // 
+            // btnUseItem
+            // 
+            this.btnUseItem.Location = new System.Drawing.Point(317, 409);
+            this.btnUseItem.Name = "btnUseItem";
+            this.btnUseItem.Size = new System.Drawing.Size(77, 24);
+            this.btnUseItem.TabIndex = 20;
+            this.btnUseItem.Text = "Use";
+            this.toolTip.SetToolTip(this.btnUseItem, "Use the selected item to the left");
+            this.btnUseItem.UseVisualStyleBackColor = true;
+            this.btnUseItem.Click += new System.EventHandler(this.btnUseItem_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(815, 204);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(50, 13);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "Damage:";
+            // 
+            // lbMonsterDMG
+            // 
+            this.lbMonsterDMG.AutoSize = true;
+            this.lbMonsterDMG.Location = new System.Drawing.Point(871, 204);
+            this.lbMonsterDMG.Name = "lbMonsterDMG";
+            this.lbMonsterDMG.Size = new System.Drawing.Size(35, 13);
+            this.lbMonsterDMG.TabIndex = 22;
+            this.lbMonsterDMG.Text = "label9";
+            // 
+            // chkAutoClear
+            // 
+            this.chkAutoClear.AutoSize = true;
+            this.chkAutoClear.Location = new System.Drawing.Point(561, 464);
+            this.chkAutoClear.Name = "chkAutoClear";
+            this.chkAutoClear.Size = new System.Drawing.Size(74, 17);
+            this.chkAutoClear.TabIndex = 23;
+            this.chkAutoClear.Text = "Auto-clear";
+            this.toolTip.SetToolTip(this.chkAutoClear, "Auto-clear text after every fight");
+            this.chkAutoClear.UseVisualStyleBackColor = true;
+            this.chkAutoClear.CheckedChanged += new System.EventHandler(this.chkAutoClear_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1232, 610);
+            this.ClientSize = new System.Drawing.Size(1190, 540);
+            this.Controls.Add(this.chkAutoClear);
+            this.Controls.Add(this.lbMonsterDMG);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.btnUseItem);
+            this.Controls.Add(this.cbItems);
             this.Controls.Add(this.lbDMG);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.lbClass);
@@ -313,9 +376,10 @@
             this.Controls.Add(this.HPBarM);
             this.Controls.Add(this.HPBarP);
             this.Controls.Add(this.txtProgress);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Arena";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -349,6 +413,11 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lbDMG;
         private System.Windows.Forms.Button btnFlee;
+        private System.Windows.Forms.ComboBox cbItems;
+        private System.Windows.Forms.Button btnUseItem;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lbMonsterDMG;
+        private System.Windows.Forms.CheckBox chkAutoClear;
     }
 }
 

@@ -18,6 +18,7 @@ namespace Fighter
         Random rand;
         private bool bossActivated;
         private bool nemesisActivated;
+        private bool isAutoClear;
         public Form1()
         {
             InitializeComponent();
@@ -45,7 +46,7 @@ namespace Fighter
             lbPlayerHP.Text = HPBarP.Value + "/" + HPBarP.Maximum;
             lbLVP.Text = player.Level.ToString();
             lbExp.Text = player.CurrentXP + "/" + player.MaxXP;
-            lbDMG.Text = player.Damage.ToString();
+            lbDMG.Text = player.Damage.ToString() + " - " + (player.Damage + (player.Level + 1)) ;
             lbClass.Text = typeof(Newbie).Name;
 
             monster = new Monster
@@ -63,11 +64,21 @@ namespace Fighter
             //HPBarM.Style = ProgressBarStyle.Continuous;
             lbMonsterHP.Text = HPBarM.Value + "/" + HPBarM.Maximum;
             lbLVM.Text = monster.Level + "";
+            lbMonsterDMG.Text = monster.Damage + " - " + (monster.Damage + monster.Level);
 
             rand = new Random();
-        }
+            //System.Media.SoundPlayer sound = new System.Media.SoundPlayer(@"C:\Users\hieudbui\Desktop\Legendary.wav");            
+            //sound.PlayLooping();
 
-        
+        }
+ 
+        private void CheckActivated()
+        {
+            if (bossActivated == true)
+                bossActivated = false;
+            if (nemesisActivated == true)
+                nemesisActivated = false;
+        }
 
         private void UpdateHPLabel(bool isPlayer)
         {
@@ -107,7 +118,34 @@ namespace Fighter
                 UpdateHPLabel(isPlayer);
             }
         }
-        
+
+        private void UpdateHPBarHealing(bool isPlayer, int value)
+        {
+            if (isPlayer)
+            {
+                if ((HPBarP.Value + value) <= HPBarP.Maximum)
+                {
+                    HPBarP.Value += value;
+                }
+                else
+                {
+                    HPBarP.Value = player.MaxHP;
+                }
+                UpdateHPLabel(isPlayer);
+            }
+            else
+            {
+                if ((HPBarM.Value + value) <= HPBarM.Maximum)
+                {
+                    HPBarM.Value += value;
+                }
+                else
+                {
+                    HPBarM.Value = monster.MaxHP;
+                }
+                UpdateHPLabel(isPlayer);
+            }
+        }
         private void UpdateNewMonster()
         {
             label3.Text = monster.Name;
@@ -115,6 +153,7 @@ namespace Fighter
             HPBarM.Value = monster.CurrentHP;         
             lbMonsterHP.Text = HPBarM.Value + "/" + HPBarM.Maximum;
             lbLVM.Text = monster.Level + "";
+            lbMonsterDMG.Text = monster.Damage + " - " + (monster.Damage + monster.Level);
         }
 
         private void ChangeClasses()
@@ -165,9 +204,10 @@ namespace Fighter
                 HPBarP.Value = player.CurrentHP;               
                 lbPlayerHP.Text = HPBarP.Value + "/" + HPBarP.Maximum;
                 lbLVP.Text = player.Level.ToString();
-                lbDMG.Text = player.Damage.ToString();
+                lbDMG.Text = player.Damage.ToString() + " - " + (player.Damage + (player.Level + 1));
 
                 txtProgress.AppendText("You leveled up!\r\n");
+                if (player.Level % 2 == 0) cbItems.Items.Add("Healing Potion");
                 if (player.Level % 3 == 0) bossActivated = true;
                 if (player.Level % 10 == 0) nemesisActivated = true;
                 if (player.Level == 5)
@@ -180,6 +220,8 @@ namespace Fighter
             }
             txtProgress.AppendText("--------------------------------------------\r\n");
             lbExp.Text = player.CurrentXP + "/" + player.MaxXP;
+            //
+            if (isAutoClear) txtProgress.Clear();
         }
 
         private int CalculateDamage()
@@ -248,6 +290,7 @@ namespace Fighter
                 txtProgress.AppendText("You did " + damage + brawlBonusText + " damage!\r\n");
                 if (monster.CurrentHP <= 0)
                 {
+                    CheckActivated();
                     txtProgress.AppendText(monster.Name + " dead...\r\n");
                     GainExperience();
                     if (player.GetType().Equals(typeof(MainChar.Fighter)))
@@ -255,12 +298,12 @@ namespace Fighter
                     if (nemesisActivated)
                     {
                         monster = MonsterGenerator.GenerateNemesis(player);
-                        nemesisActivated = false;
+                        //nemesisActivated = false;
                     }
                     else if (bossActivated)
                     {
                         monster = MonsterGenerator.GenerateBoss(player);
-                        bossActivated = false;
+                       // bossActivated = false;
                     }
                     else
                         monster = MonsterGenerator.GenerateMonster(player);
@@ -278,11 +321,13 @@ namespace Fighter
                     if (player.CurrentHP <= 0)
                     {
                         MessageBox.Show("You dissipated! What a shame!");
-                        this.Dispose();
+                        //this.Dispose();
+                        System.Diagnostics.Process.Start(Application.ExecutablePath);
                         this.Close();
                     }
                 }          
             }
+            
         }
 
         private void btnClearLog_Click(object sender, EventArgs e)
@@ -292,26 +337,27 @@ namespace Fighter
 
         private void CalculateCounterDef()
         {
-            int MONSTER_DAM_COUNTER = Convert.ToInt32(monster.Damage * 10 / 100);
-            int PERCENT = Math.Abs(Convert.ToInt32(player.CurrentHP * 20 / 100));
+            int MONSTER_DAM_COUNTER = Convert.ToInt32(monster.Damage * 50 / 100);
+            int PERCENT = Math.Abs(Convert.ToInt32(player.CurrentHP * 10 / 100));
             int damage = PERCENT + MONSTER_DAM_COUNTER;
             monster.CurrentHP -= damage;
             UpdateHPBar(false, damage);
             txtProgress.AppendText("You countered " + damage + " damage!\r\n");
             if (monster.CurrentHP <= 0)
             {
+                CheckActivated();
                 txtProgress.AppendText(monster.Name + " dead...\r\n");
                 GainExperience();
                 if (nemesisActivated)
                 {
                     monster = MonsterGenerator.GenerateNemesis(player);
-                    nemesisActivated = false;
+                    //nemesisActivated = false;
                 }
                 else
                 if (bossActivated)
                 {
                     monster = MonsterGenerator.GenerateBoss(player);
-                    bossActivated = false;
+                    //bossActivated = false;
                 }
                 else
                     monster = MonsterGenerator.GenerateMonster(player);
@@ -337,7 +383,8 @@ namespace Fighter
                 if (player.CurrentHP <= 0)
                 {
                     MessageBox.Show("You dissipated! What a shame!");
-                    this.Dispose();
+                    //this.Dispose();
+                    System.Diagnostics.Process.Start(Application.ExecutablePath);
                     this.Close();
                 }
                 if (player.GetType().Equals(typeof(Knight)))
@@ -402,6 +449,7 @@ namespace Fighter
                 txtProgress.AppendText(text + "You did " + damage + brawlBonusText + " damage!\r\n");
                 if (monster.CurrentHP <= 0)
                 {
+                    CheckActivated();
                     txtProgress.AppendText(monster.Name + " dead...\r\n");
                     GainExperience();
                     if (player.GetType().Equals(typeof(MainChar.Fighter)))
@@ -409,13 +457,13 @@ namespace Fighter
                     if (nemesisActivated)
                     {
                         monster = MonsterGenerator.GenerateNemesis(player);
-                        nemesisActivated = false;
+                        //nemesisActivated = false;
                     }
                     else
                     if (bossActivated)
                     {
                         monster = MonsterGenerator.GenerateBoss(player);
-                        bossActivated = false;
+                        //bossActivated = false;
                     }
                     else monster = MonsterGenerator.GenerateMonster(player);
                     UpdateNewMonster();
@@ -432,7 +480,8 @@ namespace Fighter
                     if (player.CurrentHP <= 0)
                     {
                         MessageBox.Show("You dissipated! What a shame!");
-                        this.Dispose();
+                        //this.Dispose();
+                        System.Diagnostics.Process.Start(Application.ExecutablePath);
                         this.Close();
                     }
                 }
@@ -441,7 +490,64 @@ namespace Fighter
 
         private void btnFlee_Click(object sender, EventArgs e)
         {
+            if (bossActivated == true || nemesisActivated == true)
+            {
+                txtProgress.AppendText("You cannot outrun this boss monster!!\r\n");              
+            }
+            else
+            {
+                txtProgress.AppendText("You fleed from the monster...\r\n");
+                int penalty = player.CurrentHP > 1 ? player.CurrentHP / 2 : 0;
+                player.CurrentHP -= penalty;
+                UpdateHPBar(true, penalty);
+                monster = MonsterGenerator.GenerateMonster(player);
+                UpdateNewMonster();
+            }
+            
 
+        }
+
+        private void UsingHPPotion()
+        {
+            int heal = player.MaxHP / 2;
+            player.CurrentHP = (player.CurrentHP + heal > player.MaxHP) ? player.MaxHP : player.CurrentHP + heal;
+            UpdateHPBarHealing(true, heal);
+        }
+
+        private void btnUseItem_Click(object sender, EventArgs e)
+        {
+            string item = cbItems.SelectedItem == null ? "" : cbItems.SelectedItem.ToString();
+            switch (item)
+            {
+                #region HP Potion
+                case "Healing Potion":
+                    if (player.CurrentHP == player.MaxHP)
+                    {
+                        DialogResult res = MessageBox.Show(this, "You are going to use a potion when full health! Do you want to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (res == DialogResult.Yes)
+                        {
+                            txtProgress.AppendText("You use a Healing Potion.\r\n");
+                            UsingHPPotion();
+                            cbItems.Items.Remove(item);
+                        }
+                    }
+                    else
+                    {
+                        txtProgress.AppendText("You use a Healing Potion.\r\n");
+                        UsingHPPotion();
+                        cbItems.Items.Remove(item);
+                    }
+                    break;
+                #endregion
+                default:
+                    break;
+            }
+        }
+
+        private void chkAutoClear_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAutoClear.Checked) isAutoClear = true;
+            else isAutoClear = false;
         }
     }
 }
